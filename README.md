@@ -208,3 +208,69 @@ import './styles/global.scss'
 npm run start
 ```
 
+## Optimización de Webpack para react
+
+1. Instalar paquetes para configuraciones
+
+```bash
+npm install css-minimizer-webpack-plugin terser-webpack-plugin clean-webpack-plugin -D
+```
+2. Crear archivo para webpack modo desarrollo *webpack.config.dev.js*, compiar todo del archivo original de webpack y optimizar.
+
+```bash
+mode: 'development',
+```
+3. Quitar el *devServer* del archivo *webpack.config.js* por ser útil unicamente en desarrollo
+
+4. Editar el archivo *webpack.config.js*
+
+* Añadir constantes
+
+```bash
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const { cleanWebpackPlugin } = require('clean-webpack-plugin')
+```
+* Añadir output
+```bash
+publicPath: "/",
+```
+* Añadir alias
+```bash
+       alias: {
+            '@components':path.resolve(__dirname,'src/components/'),
+            '@styles': path.resolve(__dirname, 'src/styles')
+        },
+```
+* Añadir plugin
+```bash
+        new CleanWebpackPlugin(),
+```
+* Añadir optimización
+```bash
+    optimization: {
+        minimize: true,
+        minimizer: [
+          new CssMinimizerPlugin(),
+          new TerserPlugin(),
+        ]
+      }
+```      
+
+* Añadir modo producción
+```bash
+mode: 'production',
+```
+
+5. Editar el archivo *package.json* en el objeto *scripts*
+
+* Añadir la configuracion *--config webpack.config.dev.js* en el start
+* Cambiar la configuracion *--config webpack.config.js* en el build
+
+```bash
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --config webpack.config.dev.js",
+    "build": "webpack --config webpack.config.js"
+  },
+```
