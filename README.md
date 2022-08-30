@@ -14,7 +14,8 @@ import React from 'react'
 import ReactDOM from 'react'
 import App from './components/App'
 
-ReactDOM.render(<App/>, document.getElementById('app'))
+const app = document.getElementById("app");
+ReactDOM.createRoot(app).render(<App/>);
 ```
 
 * src/components
@@ -91,9 +92,60 @@ module.exports = {
         ]
     },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
+        static: {
+            directory: path.join(__dirname, "dist")
+          },
         compress: true,
         port: 3006
-    }
+      }
 }
+```
+
+## Plugins Loaders
+
+1. Instalar dependencias 
+```bash
+npm install html-loader html-webpack-plugin -D
+```
+2. Editar el archivo *webpack.config.js*
+
+```bash
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+```
+
+Crear regla en *module:rules*
+
+```bash
+  {
+                test: /\.html$/,
+                use: [
+                    {loader: 'html-loader'}
+                ]
+            }
+```
+
+Crear puglin en *plugins*
+
+```bash
+plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: './index.html'
+        })
+    ],
+```
+
+Editar *package.json* en scripts **start,build**
+
+```bash
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve",
+    "build":"webpack --mode production"
+  },
+```
+
+Probar en la terminal
+```bash
+npm run start
 ```
