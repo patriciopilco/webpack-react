@@ -149,3 +149,62 @@ Probar en la terminal
 ```bash
 npm run start
 ```
+
+## Webpack para CSS en react
+
+1. Instalar dependencias y plugin
+
+```bash
+npm install mini-css-extract-plugin css-loader style-loader sass sass-loader -D
+```
+2. Editar archivo *webpack.config.js*
+
+```bash
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+```
+
+3. Añadir una nueva regla en *Module/rules*, para identificar mediante una expresión regular si es un archivo de CSS o SASS
+
+```bash
+ {
+                test: /\.s[ac]ss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            }
+```
+
+4. Agregar plugin
+
+```bash
+ new MiniCssExtractPlugin({
+            filename: '[name].css',
+          }),
+```
+
+5. Crear directorio y archivo  *src/styles/global.scss*
+
+```bash
+$base-color: #c6538c;
+$color: rgba(black, 0.88);
+
+body {
+    background-color: $base-color;
+    color: $color;
+}
+```
+
+6. Integrar el archivo al componente en *index.js*
+
+```bash
+import './styles/global.scss'
+```
+
+7. Ejecutar en la terminal
+
+```bash
+npm run start
+```
+
